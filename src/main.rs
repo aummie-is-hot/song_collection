@@ -75,9 +75,23 @@ async fn main() {
             list_view.add_items(&items);
         }
         if btn_RemoveSong.click() {
-           
+            let mut found = false;
+
+           for i in 0..items.len(){
+            if items[i] == input_Song.get_text().to_string(){
+                items.remove(i);
+                list_view.clear();
+                found = true;
+                list_view.add_items(&items);
+                break;
+            }
+           }
+           if found == false{
+            
+           }
         }
         if btn_AddSong.click() {
+            
             items.push(input_Song.get_text().to_string()); 
             list_view.clear();
             list_view.add_items(&items);
