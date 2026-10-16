@@ -7,6 +7,8 @@ Program Details: <Program Description Here>
 mod ui;
 mod utils;
 
+use std::fmt::format;
+
 use crate::ui::label::Label;
 use crate::ui::listview::ListView;
 use crate::ui::messagebox::MessageBox;
@@ -15,6 +17,8 @@ use crate::ui::text_button::TextButton;
 use crate::ui::text_input::TextInput;
 use crate::utils::preload_image::LoadingScreenOptions;
 use crate::utils::preload_image::TextureManager;
+
+use miniquad::date;
 use macroquad::prelude::*;
 /// Set up window settings before the app runs
 fn window_conf() -> Conf {
@@ -32,42 +36,49 @@ fn window_conf() -> Conf {
 
 #[macroquad::main(window_conf)]
 async fn main() {
+    rand::srand(date::now() as u64);
     let mut items = vec!["TNT".to_string(), "I love rock and roll".to_string()];
-    let mut list_view = ListView::new(&items, 1400.0, 100.0, 30);
+    let mut list_view = ListView::new(&items, 50.0, 300.0, 30);
     list_view.with_max_visible_items(5);
-    let tm = TextureManager::new();
+    //let tm = TextureManager::new();
     //tm.preload_with_loading_screen(&["assets/image1.png","assets/image2.png"], None, None).await;
-    let mut btn_AddSong = TextButton::new(50.0, 350.0, 200.0, 60.0, "Add Song", WHITE, RED, 30);
-    let mut btn_SortAbc = TextButton::new(50.0, 450.0, 250.0, 60.0, "Sort Alphabetically", WHITE, RED, 30);
-    let mut btn_ReverseAbc = TextButton::new(50.0, 550.0, 350.0, 60.0, "Sort Reverse Alphabetically", WHITE, RED, 30);
-    let mut btn_ClearList = TextButton::new(50.0, 750.0, 200.0, 60.0, "Clear List", WHITE, RED, 30);
-
-    let mut btn_RemoveSong = TextButton::new(50.0, 650.0, 200.0, 60.0, "Remove Song", WHITE, RED, 30);
-    let mut btn_exit = TextButton::new(1450.0, 650.0, 200.0, 60.0, "Exit", WHITE, RED, 30);
+    let mut btn_AddSong = TextButton::new(50.0, 650.0, 200.0, 60.0, "Add Song", WHITE, GREEN, 30);
+    let mut btn_SortAbc = TextButton::new(350.0, 650.0, 250.0, 60.0, "Sort Alphabetically", WHITE, BROWN, 30);
+    let mut btn_ReverseAbc = TextButton::new(650.0, 650.0, 350.0, 60.0, "Sort Reverse Alphabetically", WHITE, BLUE, 30);
+    let mut btn_ClearList = TextButton::new(350.0, 850.0, 200.0, 60.0, "Clear List", WHITE, LIGHTGRAY, 30);
+let mut btn_Random_Song = TextButton::new(1050.0, 850.0, 200.0, 60.0, "Random Song", WHITE,  PURPLE, 30);
+    let mut btn_RemoveSong = TextButton::new(50.0, 850.0, 200.0, 60.0, "Remove Song", WHITE, RED, 30);
+    let mut btn_exit = TextButton::new(650.0, 850.0, 200.0, 60.0, "Exit", WHITE, LIGHTGRAY, 30);
     let mut info_SongNotFound = MessageBox::info("Information", "Invaild song name, Song Cant Be Found in List");
     let mut info_InvalidName = MessageBox::info("Information", "Invaild song name, Text input cannot be blank as that isnt a song name");
-     
+    let mut confirm_Clear = MessageBox::confirm(
+    "Confirm Action",
+    "Are you sure you want to clear"
+);
     btn_exit.with_text_color(BLACK); // Sets the normal text color
-    btn_exit.with_hover_text_color(WHITE);
+    btn_exit.with_hover_text_color(BLACK);
     btn_AddSong.with_text_color(BLACK); // Sets the normal text color
     btn_AddSong.with_hover_text_color(WHITE);
     btn_SortAbc.with_text_color(BLACK); // Sets the normal text color
     btn_SortAbc.with_hover_text_color(WHITE);
     btn_ClearList.with_text_color(BLACK); // Sets the normal text color
-    btn_ClearList.with_hover_text_color(WHITE);
+    btn_ClearList.with_hover_text_color(BLACK);
     btn_RemoveSong.with_text_color(BLACK); // Sets the normal text color
     btn_RemoveSong.with_hover_text_color(WHITE);
     btn_ReverseAbc.with_text_color(BLACK); // Sets the normal text color
     btn_ReverseAbc.with_hover_text_color(WHITE);
-
+    btn_Random_Song.with_text_color(BLACK); // Sets the normal text color
+    btn_Random_Song.with_hover_text_color(WHITE);
+ let mut Random = 0;
     let mut lbl_text = Label::new(
         "Input Song Name Here to add or remove from the list, just click the buttons\n below to perform the action after typing the song name in the input box",
         10.0,
         100.0,
         30,
     );
-    let mut input_Song = TextInput::new(400.0, 300.0, 500.0, 50.0, 30.0);
-
+  
+    let mut input_Song = TextInput::new(250.0, 500.0, 500.0, 50.0, 30.0);
+input_Song.set_prompt("Input song name here...");
     loop {
         clear_background(WHITE);
 let is_empty = items.is_empty();
@@ -76,7 +87,9 @@ btn_ClearList.enabled = false;
             } else {
                 btn_ClearList.enabled = true;
             }
+            
         if btn_ClearList.click() {
+            confirm_Clear.show();
             items.clear();
             list_view.clear();
             list_view.add_items(&items);
@@ -122,13 +135,17 @@ btn_ClearList.enabled = false;
             list_view.clear();
             list_view.add_items(&items);
         }
-
+        if btn_Random_Song.click() {
+            Random = rand::gen_range(0, items.len());
+            lbl_text.set_text(&format!("Random song:  {}", items[Random]));
+        }
         lbl_text.draw();
         input_Song.draw();
 
         if btn_exit.click() {
             break;
         }
+         confirm_Clear.draw();
         info_SongNotFound.draw();
         info_InvalidName.draw();
         list_view.draw();
