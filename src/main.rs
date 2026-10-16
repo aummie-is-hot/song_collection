@@ -15,6 +15,7 @@ use macroquad::prelude::*;
     use crate::ui::still_image::StillImage;
     use crate::ui::label::Label;
     use crate::ui::listview::ListView;
+    use crate::ui::messagebox::MessageBox;
 /// Set up window settings before the app runs
 fn window_conf() -> Conf {
     Conf {
@@ -43,7 +44,7 @@ async fn main() {
      
     let mut btn_RemoveSong = TextButton::new(50.0, 650.0, 200.0, 60.0, "Remove Song", WHITE, RED, 30);
     let mut btn_exit = TextButton::new(1450.0, 650.0, 200.0, 60.0, "Exit", WHITE, RED, 30);
-
+let mut info_box = MessageBox::info("Information", "Invaild song name");
      btn_exit.with_text_color(BLACK); // Sets the normal text color
     btn_exit.with_hover_text_color(WHITE);
     btn_AddSong.with_text_color(BLACK); // Sets the normal text color
@@ -87,7 +88,7 @@ async fn main() {
             }
            }
            if found == false{
-            
+            info_box.show(); 
            }
         }
         if btn_AddSong.click() {
@@ -116,6 +117,7 @@ async fn main() {
          if btn_exit.click() {
             break;
         }
+        info_box.draw();
         list_view.draw();
         next_frame().await;
     }
