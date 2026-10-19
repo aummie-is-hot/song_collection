@@ -48,13 +48,13 @@ async fn main() {
     let mut btn_ClearList = TextButton::new(350.0, 850.0, 200.0, 60.0, "Clear List", WHITE, LIGHTGRAY, 30);
     let mut btn_Random_Song = TextButton::new(1050.0, 850.0, 200.0, 60.0, "Random Song", WHITE, PURPLE, 30);
     let mut btn_RemoveSong = TextButton::new(50.0, 850.0, 200.0, 60.0, "Remove Song", WHITE, RED, 30);
-    let mut btn_exit = TextButton::new(650.0, 850.0, 200.0, 60.0, "Exit", WHITE, LIGHTGRAY, 30);
+    let mut btn_exit = TextButton::new(650.0, 850.0, 200.0, 60.0, "Exit", RED, RED, 30);
     let mut info_SongNotFound = MessageBox::info("Information", "Invaild song name, Song Cant Be Found in List");
     let mut info_InvalidName = MessageBox::info("Information", "Invaild song name, Text input cannot be blank as that isnt a song name");
 
     let mut confirm_Clear = MessageBox::confirm("Confirm Action", "Are you sure you want to clear");
-    btn_exit.with_text_color(BLACK); // Sets the normal text color
-    btn_exit.with_hover_text_color(BLACK);
+    btn_exit.with_text_color(WHITE); // Sets the normal text color
+    
     btn_AddSong.with_text_color(BLACK); // Sets the normal text color
     btn_AddSong.with_hover_text_color(WHITE);
     btn_SortAbc.with_text_color(BLACK); // Sets the normal text color
