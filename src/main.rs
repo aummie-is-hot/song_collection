@@ -75,7 +75,8 @@ async fn main() {
         30,
     );
     let mut lbl_SongsCount = Label::new("Total Songs: ", 1160.0, 400.0, 30);
-
+list_view
+        .with_colors(BLACK, Some(WHITE), Some(RED));              // Fixed width (auto-calculated if not set)
     let mut input_Song = TextInput::new(250.0, 500.0, 500.0, 50.0, 30.0);
     input_Song.set_prompt("Input song name here...");
     loop {
@@ -111,6 +112,10 @@ async fn main() {
                 }
             }
         if btn_RemoveSong.click() {
+              let selected = list_view.selected_item(); 
+              if is_empty == true{
+                
+              }
             let mut found = false;
             if !input_Song.get_text().is_empty() {
                 for i in 0..items.len() {
